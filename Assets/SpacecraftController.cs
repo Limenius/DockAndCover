@@ -19,6 +19,9 @@ public class SpacecraftController : MonoBehaviour {
 
 	public Texture2D crosshairImage;
 
+	public GUIText distanceX;
+	public GUIText distanceY;
+
 	void Start()
 	{
 		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
@@ -33,9 +36,24 @@ public class SpacecraftController : MonoBehaviour {
 		GUI.DrawTexture(new Rect(xMin, yMin, crosshairImage.width, crosshairImage.height), crosshairImage);
 	}
 
+	void Update()
+	{
+		this.distanceX.text = "Distance X " + Mathf.Abs (rigidbody.position.x - this.station.rigidbody.position.x);
+		if (!this.checkPositionX ()) {
+			this.distanceX.color = Color.red;
+		} else {
+			this.distanceX.color = Color.green;
+		}
+		this.distanceY.text = "Distance Y " + Mathf.Abs (rigidbody.position.y - this.station.rigidbody.position.y);
+		if (!this.checkPositionY ()) {
+			this.distanceY.color = Color.red;
+		} else {
+			this.distanceY.color = Color.green;
+		}
+	}
+
 	void FixedUpdate()
 	{
-
 		if (Input.GetKey ("up")) {
 			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient * Time.deltaTime);
 		}
@@ -91,17 +109,39 @@ public class SpacecraftController : MonoBehaviour {
 
 
 		if (this.checkDocking ()) {
-			Debug.Log ("docking");
+			this.dock();
 		}
 	}
 
-	private bool checkDocking()
+	private void dock() {
+		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+		this.rigidbody.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
+	}
+
+	private bool checkPositionX()
 	{
 		if (Mathf.Abs(rigidbody.position.x - this.station.rigidbody.position.x) > this.dockingPositionThreshold) {
 			return false;
 		}
+		return true;
+	}
 
+	private bool checkPositionY()
+	{
 		if (Mathf.Abs(rigidbody.position.y - this.station.rigidbody.position.y) > this.dockingPositionThreshold) {
+			return false;
+		}
+		return true;
+	}
+
+	private bool checkDocking()
+	{
+	
+		if (!this.checkPositionX ()) {
+			return false;
+		}
+
+		if (!this.checkPositionY ()) {
 			return false;
 		}
 
