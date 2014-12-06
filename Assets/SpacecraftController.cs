@@ -7,7 +7,7 @@ public class SpacecraftController : MonoBehaviour {
 	public float positionAcceleratorCoefficient;
 	public float rotationAcceleratorCoefficient;
 	public float dockingPositionThreshold;
-	public float dockingAccelerationThreshold;
+	public float dockingVelocityThreshold;
 	public float dockingRotationThreshold;
 
 	public GameObject station;
@@ -21,6 +21,8 @@ public class SpacecraftController : MonoBehaviour {
 
 	public GUIText distanceX;
 	public GUIText distanceY;
+	public GUIText accelerationY;
+	public GUIText velocityY;
 
 	void Start()
 	{
@@ -50,6 +52,16 @@ public class SpacecraftController : MonoBehaviour {
 		} else {
 			this.distanceY.color = Color.green;
 		}
+
+		this.accelerationY.text = "Acceleration Y " + this.acceleration.y;
+
+		this.velocityY.text = "Velocity Y " + this.rigidbody.velocity.y;
+		if (!this.checkVelocityY ()) {
+						this.velocityY.color = Color.red;
+				} else {
+			this.velocityY.color = Color.green;
+				}
+
 	}
 
 	void FixedUpdate()
@@ -134,6 +146,14 @@ public class SpacecraftController : MonoBehaviour {
 		return true;
 	}
 
+	private bool checkVelocityY()
+	{
+		if (Mathf.Abs(rigidbody.velocity.y) > this.dockingVelocityThreshold) {
+			return false;
+		}
+		return true;
+	}
+
 	private bool checkDocking()
 	{
 	
@@ -144,36 +164,36 @@ public class SpacecraftController : MonoBehaviour {
 		if (!this.checkPositionY ()) {
 			return false;
 		}
+//
+//		if (Mathf.Abs(rigidbody.position.z - this.station.rigidbody.position.z) > this.dockingPositionThreshold) {
+//			return false;
+//		}
+//
+//		if (Mathf.Abs(rigidbody.velocity.x) > this.dockingVelocityThreshold) {
+//			return false;
+//		}
 
-		if (Mathf.Abs(rigidbody.position.z - this.station.rigidbody.position.z) > this.dockingPositionThreshold) {
+		if (!this.checkVelocityY ()) {
 			return false;
 		}
 
-		if (Mathf.Abs(rigidbody.velocity.x) > this.dockingAccelerationThreshold) {
-			return false;
-		}
-
-		if (Mathf.Abs(rigidbody.velocity.y) > this.dockingAccelerationThreshold) {
-			return false;
-		}
-
-		if (Mathf.Abs(rigidbody.velocity.z) > this.dockingAccelerationThreshold) {
-			return false;
-		}
-
-		if (Mathf.Abs((rigidbody.rotation.x - 0.7071068f) - this.station.rigidbody.rotation.x) > this.dockingRotationThreshold) {
-			Debug.Log("camera " + (rigidbody.rotation.x ));
-			Debug.Log(this.station.rigidbody.rotation.x);
-			return false;
-		}
-
-		if (Mathf.Abs(rigidbody.rotation.y - this.station.rigidbody.rotation.y) > this.dockingRotationThreshold) {
-			return false;
-		}
-
-		if (Mathf.Abs(rigidbody.rotation.z - this.station.rigidbody.rotation.z) > this.dockingRotationThreshold) {
-			return false;
-		}
+//		if (Mathf.Abs(rigidbody.velocity.z) > this.dockingVelocityThreshold) {
+//			return false;
+//		}
+//
+//		if (Mathf.Abs((rigidbody.rotation.x - 0.7071068f) - this.station.rigidbody.rotation.x) > this.dockingRotationThreshold) {
+//			Debug.Log("camera " + (rigidbody.rotation.x ));
+//			Debug.Log(this.station.rigidbody.rotation.x);
+//			return false;
+//		}
+//
+//		if (Mathf.Abs(rigidbody.rotation.y - this.station.rigidbody.rotation.y) > this.dockingRotationThreshold) {
+//			return false;
+//		}
+//
+//		if (Mathf.Abs(rigidbody.rotation.z - this.station.rigidbody.rotation.z) > this.dockingRotationThreshold) {
+//			return false;
+//		}
 
 
 		return true;
