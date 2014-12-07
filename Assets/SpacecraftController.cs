@@ -30,10 +30,21 @@ public class SpacecraftController : MonoBehaviour {
 	public GUIText accelerationY;
 	public GUIText velocityY;
 
+	public GameObject explosion;
+	public GameObject docking;
+	public GameObject pipipi;
+
+	private bool isAlive;
+	private bool isDocked;
+
+	private GameObject pipipiObj;
+
 	void Start()
 	{
 		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 		this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
+		this.isAlive = true;
+		this.isDocked = false;
 
 	}
 
@@ -132,12 +143,18 @@ public class SpacecraftController : MonoBehaviour {
 	}
 
 	private void dock() {
-		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
-		this.rigidbody.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
-		StartCoroutine (hookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f, 0.0f), this.hookSpeed, 0.1f));
-		StartCoroutine (hookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f, 120.0f), this.hookSpeed, 0.1f));
-		StartCoroutine (hookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f, 240.0f), this.hookSpeed, 0.1f));
-
+		if (!isDocked) {
+			this.acceleration = new Vector3(0.0f, 0.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
+			StartCoroutine (hookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f, 0.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (hookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f, 120.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (hookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f, 240.0f), this.hookSpeed, 0.1f));
+			pipipiObj = (GameObject)Instantiate (pipipi, transform.position, transform.rotation);
+			pipipiObj.transform.parent = transform;
+			isDocked = true;
+		}
+		
 
 	}
 
@@ -152,6 +169,9 @@ public class SpacecraftController : MonoBehaviour {
 			
 			angleDist = Quaternion.Angle(trans.rotation, destRot);
 		}
+		Destroy (pipipiObj);
+		GameObject dockingObj = (GameObject)Instantiate (docking, transform.position, transform.rotation);
+		dockingObj.transform.parent = transform;
 	}
 
 	private bool checkPositionX()
@@ -228,7 +248,12 @@ public class SpacecraftController : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 
 		Debug.Log ("MUERTE");
+		if (isAlive) {
+			GameObject explosionObj = (GameObject) Instantiate (explosion, transform.position, transform.rotation);
+			explosionObj.transform.parent = transform;
 
+			isAlive = false;
+		}
 	}
 
 }
