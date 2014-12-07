@@ -98,9 +98,9 @@ public class SpacecraftController : MonoBehaviour {
 			}
 			this.distanceZ.text = "Distance Z " + rigidbody.position.z ;
 			if (!this.checkPositionZ ()) {
-					this.distanceY.color = Color.red;
+					this.distanceZ.color = Color.red;
 			} else {
-					this.distanceY.color = Color.green;
+					this.distanceZ.color = Color.green;
 			}
 
 
@@ -312,7 +312,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	private bool checkPositionX()
 	{
-		if (rigidbody.position.x > this.dockingPositionThreshold) {
+		if (Mathf.Abs(rigidbody.position.x) > this.dockingPositionThreshold) {
 			return false;
 		}
 		return true;
@@ -328,7 +328,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	private bool checkPositionZ()
 	{
-		if (rigidbody.position.z > this.dockingPositionThreshold) {
+		if (Mathf.Abs(rigidbody.position.z) > this.dockingPositionThreshold) {
 			return false;
 		}
 		return true;
