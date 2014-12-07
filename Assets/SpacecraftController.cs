@@ -39,12 +39,22 @@ public class SpacecraftController : MonoBehaviour {
 
 	private GameObject pipipiObj;
 
+	private bool restart;
+	private bool gameOver;
+	private int level;
+	private bool startScreen;
+
 	void Start()
 	{
 		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 		this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 		this.isAlive = true;
 		this.isDocked = false;
+
+		this.restart = false;
+		this.gameOver = false;
+		this.level = 0;
+		this.startScreen = true;
 
 	}
 
