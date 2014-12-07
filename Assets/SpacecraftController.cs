@@ -42,7 +42,11 @@ public class SpacecraftController : MonoBehaviour {
 	private bool restart;
 	private bool gameOver;
 	private int level;
-	private bool startScreen;
+	private bool playing;
+
+	public float levelWait;
+
+	public GUIText centerGUI;
 
 	void Start()
 	{
@@ -53,8 +57,8 @@ public class SpacecraftController : MonoBehaviour {
 
 		this.restart = false;
 		this.gameOver = false;
-		this.level = 0;
-		this.startScreen = true;
+		this.level = 1;
+		this.playing = false;
 
 	}
 
@@ -67,92 +71,106 @@ public class SpacecraftController : MonoBehaviour {
 
 	void Update()
 	{
-		this.distanceX.text = "Distance X " + Mathf.Abs (rigidbody.position.x - this.station.rigidbody.position.x);
-		if (!this.checkPositionX ()) {
-			this.distanceX.color = Color.red;
-		} else {
-			this.distanceX.color = Color.green;
+		if (this.playing) {
+			this.distanceX.text = "Distance X " + Mathf.Abs (rigidbody.position.x - this.station.rigidbody.position.x);
+			if (!this.checkPositionX ()) {
+					this.distanceX.color = Color.red;
+			} else {
+					this.distanceX.color = Color.green;
+			}
+			this.distanceY.text = "Distance Y " + Mathf.Abs (rigidbody.position.y - this.station.rigidbody.position.y);
+			if (!this.checkPositionY ()) {
+					this.distanceY.color = Color.red;
+			} else {
+					this.distanceY.color = Color.green;
+			}
+
+			this.accelerationY.text = "Acceleration Y " + this.acceleration.y;
+
+			this.velocityY.text = "Velocity Y " + this.rigidbody.velocity.y;
+			if (!this.checkVelocityY ()) {
+					this.velocityY.color = Color.red;
+			} else {
+					this.velocityY.color = Color.green;
+			}
+		} else if (!this.gameOver) {
+			StartCoroutine(DisplayLevel());
 		}
-		this.distanceY.text = "Distance Y " + Mathf.Abs (rigidbody.position.y - this.station.rigidbody.position.y);
-		if (!this.checkPositionY ()) {
-			this.distanceY.color = Color.red;
-		} else {
-			this.distanceY.color = Color.green;
-		}
 
-		this.accelerationY.text = "Acceleration Y " + this.acceleration.y;
-
-		this.velocityY.text = "Velocity Y " + this.rigidbody.velocity.y;
-		if (!this.checkVelocityY ()) {
-						this.velocityY.color = Color.red;
-				} else {
-			this.velocityY.color = Color.green;
-				}
-
+	
+	}
+	
+	IEnumerator DisplayLevel() {
+		centerGUI.text = "Level " + level;	
+		yield return new WaitForSeconds(levelWait);
+		centerGUI.text = "";
+		this.playing = true;
 	}
 
 	void FixedUpdate()
 	{
-		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
-		this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
+		if (this.playing) {
+			this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
+			this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 
-		if (Input.GetKey ("up")) {
-			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient);
-		}
-		
-		if (Input.GetKey ("down")) {
-			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z + this.positionAcceleratorCoefficient);
-		}
+			if (Input.GetKey ("up")) {
+					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient);
+			}
 
-		if (Input.GetKey ("right")) {
-			this.acceleration = new Vector3(this.acceleration.x - this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
-		}
-		
-		if (Input.GetKey ("left")) {
-			this.acceleration = new Vector3(this.acceleration.x + this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
-		}
+			if (Input.GetKey ("down")) {
+					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z + this.positionAcceleratorCoefficient);
+			}
 
-		if (Input.GetKey ("o")) {
-			this.acceleration = this.acceleration + new Vector3(0.0f, - this.positionAcceleratorCoefficient, 0.0f);
-		}
-		
-		if (Input.GetKey ("p")) {
-			this.acceleration = this.acceleration + new Vector3(0.0f, + this.positionAcceleratorCoefficient, 0.0f);
-		}
+			if (Input.GetKey ("right")) {
+					this.acceleration = new Vector3 (this.acceleration.x - this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
+			}
 
-		rigidbody.velocity += this.acceleration  * Time.deltaTime;
+			if (Input.GetKey ("left")) {
+					this.acceleration = new Vector3 (this.acceleration.x + this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
+			}
 
-		if (Input.GetKey ("a")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, 0.0f, - this.rotationAcceleratorCoefficient);
-		}
-		
-		if (Input.GetKey ("s")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, 0.0f, + this.rotationAcceleratorCoefficient);
-		}
+			if (Input.GetKey ("o")) {
+					this.acceleration = this.acceleration + new Vector3 (0.0f, - this.positionAcceleratorCoefficient, 0.0f);
+			}
 
-		if (Input.GetKey ("q")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, - this.rotationAcceleratorCoefficient, 0.0f);
-		}
-		
-		if (Input.GetKey ("w")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, + this.rotationAcceleratorCoefficient, 0.0f);
-		}
+			if (Input.GetKey ("p")) {
+					this.acceleration = this.acceleration + new Vector3 (0.0f, + this.positionAcceleratorCoefficient, 0.0f);
+			}
 
-		if (Input.GetKey ("z")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(- this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
-		}
-		
-		if (Input.GetKey ("x")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(+ this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
-		}
+			rigidbody.velocity += this.acceleration * Time.deltaTime;
 
+			if (Input.GetKey ("a")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, 0.0f, - this.rotationAcceleratorCoefficient);
+			}
 
-		rigidbody.angularVelocity += this.rotationAcceleration * Time.deltaTime;
+			if (Input.GetKey ("s")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, 0.0f, + this.rotationAcceleratorCoefficient);
+			}
+
+			if (Input.GetKey ("q")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, - this.rotationAcceleratorCoefficient, 0.0f);
+			}
+
+			if (Input.GetKey ("w")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, + this.rotationAcceleratorCoefficient, 0.0f);
+			}
+
+			if (Input.GetKey ("z")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (- this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
+			}
+
+			if (Input.GetKey ("x")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (+ this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
+			}
 
 
-		if (this.checkDocking ()) {
-			this.dock();
-		}
+			rigidbody.angularVelocity += this.rotationAcceleration * Time.deltaTime;
+
+
+			if (this.checkDocking ()) {
+					this.dock ();
+			}
+	}
 	}
 
 	private void dock() {
