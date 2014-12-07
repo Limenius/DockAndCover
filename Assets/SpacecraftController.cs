@@ -45,6 +45,8 @@ public class SpacecraftController : MonoBehaviour {
 	private bool playing;
 
 	public float levelWait;
+	public float gameOverWait;
+	public float dockedWait;
 
 	public GUIText centerGUI;
 
@@ -96,6 +98,15 @@ public class SpacecraftController : MonoBehaviour {
 			}
 		} else if (!this.gameOver) {
 			StartCoroutine(DisplayLevel());
+		} else if (this.restart) {
+
+			if (Input.GetKeyDown (KeyCode.R)) 
+			{
+
+				StartCoroutine(DisplayLevel());
+
+			}
+
 		}
 
 	
@@ -111,8 +122,19 @@ public class SpacecraftController : MonoBehaviour {
 
 	}
 
+	private void setStationRendererStatus (bool enabled)
+	{
+		Renderer[] lChildRenderers=this.station.GetComponentsInChildren<Renderer>();
+		foreach ( Renderer lRenderer in lChildRenderers)
+		{
+			lRenderer.enabled=enabled;
+		}
+	}
+
 	private void PreLevel()
 	{
+		setStationRendererStatus (true);
+
 		switch (this.level) {
 		case 1:
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
@@ -121,6 +143,10 @@ public class SpacecraftController : MonoBehaviour {
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 2:
+			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		}
 	}
@@ -129,17 +155,19 @@ public class SpacecraftController : MonoBehaviour {
 	{
 		switch (level) {
 		case 1:
-			this.rigidbody.velocity = new Vector3(1.0f, 0.0f, 0.0f);
-			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.1f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 1.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 2:
+			this.rigidbody.velocity = new Vector3(1.0f, 1.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		}
 	}
 	
 	void FixedUpdate()
 	{
-		if (this.playing) {
+		if (this.playing && !this.isDocked) {
 			this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 			this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 
@@ -208,9 +236,10 @@ public class SpacecraftController : MonoBehaviour {
 			this.acceleration = new Vector3(0.0f, 0.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
-			StartCoroutine (hookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f, 0.0f), this.hookSpeed, 0.1f));
-			StartCoroutine (hookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f, 120.0f), this.hookSpeed, 0.1f));
-			StartCoroutine (hookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f, 240.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (HookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f, 0.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (HookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f, 120.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (HookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f, 240.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (DuringDock());
 			pipipiObj = (GameObject)Instantiate (pipipi, transform.position, transform.rotation);
 			pipipiObj.transform.parent = transform;
 			isDocked = true;
@@ -219,7 +248,15 @@ public class SpacecraftController : MonoBehaviour {
 
 	}
 
-	IEnumerator hookAnimation(Transform trans, Quaternion destRot, float speed, float threshold )
+	IEnumerator DuringDock() {
+		centerGUI.text = "YOU DID IT";
+
+		yield return new WaitForSeconds(dockedWait);
+		this.level ++;
+		StartCoroutine(DisplayLevel());
+	}
+
+	IEnumerator HookAnimation(Transform trans, Quaternion destRot, float speed, float threshold )
 	{
 		float angleDist = Quaternion.Angle(trans.rotation, destRot);
 		
@@ -233,6 +270,10 @@ public class SpacecraftController : MonoBehaviour {
 		Destroy (pipipiObj);
 		GameObject dockingObj = (GameObject)Instantiate (docking, transform.position, transform.rotation);
 		dockingObj.transform.parent = transform;
+
+
+
+
 	}
 
 	private bool checkPositionX()
@@ -308,13 +349,26 @@ public class SpacecraftController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 
-		Debug.Log ("MUERTE");
-		if (isAlive) {
+		if (playing) {
 			GameObject explosionObj = (GameObject) Instantiate (explosion, transform.position, transform.rotation);
 			explosionObj.transform.parent = transform;
 
-			isAlive = false;
+			playing = false;
+			gameOver = true;
+			restart = true;
+			StartCoroutine (GameOver());
+
 		}
+	}
+
+	IEnumerator GameOver() {
+		setStationRendererStatus (false);
+		centerGUI.text = "Game Over";	
+		yield return new WaitForSeconds(gameOverWait);
+
+		centerGUI.text = "Press R to restart";	
+		
+		
 	}
 
 }
