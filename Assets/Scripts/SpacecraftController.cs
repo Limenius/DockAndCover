@@ -54,8 +54,12 @@ public class SpacecraftController : MonoBehaviour {
 	public float dockedWait;
 
 	public GUIText centerGUI;
+	public GUIText additionalCenterGUI;
+	public GUIText timerGUI;
 
-
+	private bool levelTimed;
+	private float levelTime;
+	private float startLevelTime;
 
 
 	void Start()
@@ -74,6 +78,7 @@ public class SpacecraftController : MonoBehaviour {
 		this.originalHook2Rot = this.hook2.transform.rotation;
 		this.originalHook3Rot = this.hook3.transform.rotation;
 
+		this.timerGUI.text = "";
 
 	}
 
@@ -134,11 +139,13 @@ public class SpacecraftController : MonoBehaviour {
 	}
 	
 	IEnumerator DisplayLevel() {
+		this.playing = true;
+		this.paused = true;
 		PreLevel ();
 		centerGUI.text = "Level " + level;	
 		yield return new WaitForSeconds(levelWait);
 		centerGUI.text = "";
-		this.playing = true;
+
 		StartLevel ();
 
 	}
@@ -157,32 +164,49 @@ public class SpacecraftController : MonoBehaviour {
 		setStationRendererStatus (true);
         isDocked = false;
 		ResetHooks ();
-
+		this.timerGUI.text = "";
 		switch (this.level) {
 		case 1:
+			this.levelTimed = false;
+			this.additionalCenterGUI.text = "Press O and P to approach\nand retreat from the station";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTime = 10.0f;
 			break;
 		case 2:
+			this.additionalCenterGUI.text = "Watch out your docking speed";
+
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTimed = false;
+
+			this.levelTime = 100.0f;
 			break;
 		case 3:
+			this.additionalCenterGUI.text = "Use arrows to move";
+			
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTimed = false;
+			
+			this.levelTime = 100.0f;
 			break;
+		}
+		if (this.levelTimed) {
+			this.timerGUI.text = this.levelTime.ToString ("n1");
 		}
 	}
 
 	private void StartLevel()
 	{
 		paused = false;
+		this.additionalCenterGUI.text = "";
 		switch (level) {
 		case 1:
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
@@ -197,11 +221,23 @@ public class SpacecraftController : MonoBehaviour {
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		}
+		this.startLevelTime = Time.time;
 	}
 	
 	void FixedUpdate()
 	{
 		if (this.playing && !this.isDocked && !this.paused) {
+			if (this.levelTimed) {
+				float remaining = (this.levelTime - (Time.time - this.startLevelTime));
+				if (remaining <= 0.0f) {
+					remaining = 0.0f;
+					StartCoroutine (GameOver("Time is out.\nYou die."));
+
+					
+				}
+				this.timerGUI.text = remaining.ToString("n1");
+			}
+
 			this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 			this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 
@@ -285,7 +321,7 @@ public class SpacecraftController : MonoBehaviour {
 	}
 
 	IEnumerator DuringDock() {
-		centerGUI.text = "YOU DID IT";
+		centerGUI.text = "You did it";
 
 		yield return new WaitForSeconds(dockedWait);
 		this.level ++;
@@ -413,20 +449,23 @@ public class SpacecraftController : MonoBehaviour {
 			GameObject explosionObj = (GameObject) Instantiate (explosion, transform.position, transform.rotation);
 			explosionObj.transform.parent = transform;
 
-			playing = false;
-			gameOver = true;
-			restart = true;
-			StartCoroutine (GameOver());
-			paused = true;
+
+			StartCoroutine (GameOver("Crashed\nThat ship was worth $3bn"));
+
 
 		}
 	}
 
-	IEnumerator GameOver() {
+	IEnumerator GameOver(string reason) {
+		playing = false;
+		gameOver = true;
+		restart = true;
+		paused = true;
 		setStationRendererStatus (false);
 		centerGUI.text = "Game Over";	
+		additionalCenterGUI.text = reason;
 		yield return new WaitForSeconds(gameOverWait);
-
+		additionalCenterGUI.text = "";
 		centerGUI.text = "Press R to restart";	
 		
 		
