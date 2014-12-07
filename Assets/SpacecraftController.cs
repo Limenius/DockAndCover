@@ -34,7 +34,6 @@ public class SpacecraftController : MonoBehaviour {
 	public GameObject docking;
 	public GameObject pipipi;
 
-	private bool isAlive;
 	private bool isDocked;
 
 	private GameObject pipipiObj;
@@ -54,7 +53,6 @@ public class SpacecraftController : MonoBehaviour {
 	{
 		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 		this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
-		this.isAlive = true;
 		this.isDocked = false;
 
 		this.restart = false;
@@ -134,6 +132,7 @@ public class SpacecraftController : MonoBehaviour {
 	private void PreLevel()
 	{
 		setStationRendererStatus (true);
+        isDocked = false;
 
 		switch (this.level) {
 		case 1:
@@ -143,7 +142,13 @@ public class SpacecraftController : MonoBehaviour {
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 2:
-			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
+			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 3:
+			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
@@ -155,11 +160,15 @@ public class SpacecraftController : MonoBehaviour {
 	{
 		switch (level) {
 		case 1:
-			this.rigidbody.velocity = new Vector3(0.0f, 1.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 2:
-			this.rigidbody.velocity = new Vector3(1.0f, 1.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, -1.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 3:
+			this.rigidbody.velocity = new Vector3(1.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		}
@@ -180,11 +189,11 @@ public class SpacecraftController : MonoBehaviour {
 			}
 
 			if (Input.GetKey ("right")) {
-					this.acceleration = new Vector3 (this.acceleration.x - this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
+					this.acceleration = new Vector3 (this.acceleration.x + this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
 			}
 
 			if (Input.GetKey ("left")) {
-					this.acceleration = new Vector3 (this.acceleration.x + this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
+					this.acceleration = new Vector3 (this.acceleration.x - this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
 			}
 
 			if (Input.GetKey ("o")) {
@@ -286,7 +295,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	private bool checkPositionY()
 	{
-		if (Mathf.Abs(rigidbody.position.y - this.station.rigidbody.position.y) > this.dockingPositionThreshold) {
+		if (Mathf.Abs(rigidbody.position.y - (this.station.rigidbody.position.y + 0.6f)) > this.dockingPositionThreshold) {
 			return false;
 		}
 		return true;
