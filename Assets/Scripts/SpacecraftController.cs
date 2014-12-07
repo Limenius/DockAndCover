@@ -189,7 +189,7 @@ public class SpacecraftController : MonoBehaviour {
 	private void StartLevel()
 	{
 		paused = false;
-		switch (level) {
+		switch (this.level) {
 		case 1:
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
@@ -204,7 +204,7 @@ public class SpacecraftController : MonoBehaviour {
 			break;
 		case 4:
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
-			this.rigidbody.angularVelocity = new Vector3(0.0f, 1.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.3f, 0.0f);
 			break;
 		}
 	}
@@ -267,7 +267,7 @@ public class SpacecraftController : MonoBehaviour {
 			}
 
 
-			rigidbody.angularVelocity += this.rotationAcceleration * Time.deltaTime;
+			rigidbody.angularVelocity += this.rotationAcceleration * (Time.deltaTime * Random.Range (0.9f, 1.1f));
 
 
 			if (this.checkDocking ()) {
