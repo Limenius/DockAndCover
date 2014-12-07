@@ -83,13 +83,13 @@ public class SpacecraftController : MonoBehaviour {
 	void Update()
 	{
 		if (this.playing) {
-			this.distanceX.text = "Distance X " + Mathf.Abs (rigidbody.position.x - this.station.rigidbody.position.x);
+			this.distanceX.text = "Distance X " + rigidbody.position.x ;
 			if (!this.checkPositionX ()) {
 					this.distanceX.color = Color.red;
 			} else {
 					this.distanceX.color = Color.green;
 			}
-			this.distanceY.text = "Distance Y " + Mathf.Abs (rigidbody.position.y - this.station.rigidbody.position.y);
+			this.distanceY.text = "Distance Y " + rigidbody.position.y ;
 			if (!this.checkPositionY ()) {
 					this.distanceY.color = Color.red;
 			} else {
@@ -147,7 +147,7 @@ public class SpacecraftController : MonoBehaviour {
 
 		switch (this.level) {
 		case 1:
-			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
+			this.transform.position = new Vector3(0.0f, 2.4f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
@@ -304,7 +304,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	private bool checkPositionX()
 	{
-		if (Mathf.Abs(rigidbody.position.x - this.station.rigidbody.position.x) > this.dockingPositionThreshold) {
+		if (rigidbody.position.x > this.dockingPositionThreshold) {
 			return false;
 		}
 		return true;
@@ -312,7 +312,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	private bool checkPositionY()
 	{
-		if (Mathf.Abs(rigidbody.position.y - (this.station.rigidbody.position.y + 0.6f)) > this.dockingPositionThreshold) {
+		if (rigidbody.position.y > this.dockingPositionThreshold) {
 			return false;
 		}
 		return true;
