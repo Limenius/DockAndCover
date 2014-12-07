@@ -172,6 +172,12 @@ public class SpacecraftController : MonoBehaviour {
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
+		case 4:
+			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
 		}
 	}
 
@@ -190,6 +196,10 @@ public class SpacecraftController : MonoBehaviour {
 		case 3:
 			this.rigidbody.velocity = new Vector3(1.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 4:
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 1.0f, 0.0f);
 			break;
 		}
 	}
