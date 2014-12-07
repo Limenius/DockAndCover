@@ -10,6 +10,8 @@ public class SpacecraftController : MonoBehaviour {
 	public float dockingVelocityThreshold;
 	public float dockingRotationThreshold;
 
+	public float hookSpeed;
+
 	public GameObject hook1;
 	public GameObject hook2;
 	public GameObject hook3;
@@ -132,16 +134,15 @@ public class SpacecraftController : MonoBehaviour {
 	private void dock() {
 		this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		this.rigidbody.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
-		StartCoroutine (hookAnimation(hook1));
-		StartCoroutine (hookAnimation(hook2));
-		StartCoroutine (hookAnimation(hook3));
+		StartCoroutine (hookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f, 0.0f), this.hookSpeed, 0.1f));
+		StartCoroutine (hookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f, 120.0f), this.hookSpeed, 0.1f));
+		StartCoroutine (hookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f, 240.0f), this.hookSpeed, 0.1f));
+
+
 	}
 
-	IEnumerator hookAnimation(Transform trans )
+	IEnumerator hookAnimation(Transform trans, Quaternion destRot, float speed, float threshold )
 	{
-		Quaternion destRot = Quaternion.Euler (90.0f, 0.0f, 0.0f);
-		float speed = 0.1f;
-		float threshold = 0.1f;
 		float angleDist = Quaternion.Angle(trans.rotation, destRot);
 		
 		while (angleDist > threshold)
@@ -149,7 +150,7 @@ public class SpacecraftController : MonoBehaviour {
 			trans.rotation = Quaternion.RotateTowards(trans.rotation, destRot, Time.deltaTime * speed);
 			yield return null;
 			
-			float angleDist = Quaternion.Angle(trans.rotation, destRot);
+			angleDist = Quaternion.Angle(trans.rotation, destRot);
 		}
 	}
 
