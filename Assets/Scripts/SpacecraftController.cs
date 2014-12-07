@@ -31,6 +31,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	public GUIText distanceX;
 	public GUIText distanceY;
+	public GUIText distanceZ;
 	public GUIText accelerationY;
 	public GUIText velocityY;
 
@@ -95,10 +96,17 @@ public class SpacecraftController : MonoBehaviour {
 			} else {
 					this.distanceY.color = Color.green;
 			}
+			this.distanceZ.text = "Distance Z " + rigidbody.position.z ;
+			if (!this.checkPositionZ ()) {
+					this.distanceY.color = Color.red;
+			} else {
+					this.distanceY.color = Color.green;
+			}
+
 
 			this.accelerationY.text = "Acceleration Y " + this.acceleration.y;
 
-			this.velocityY.text = "Velocity Y " + this.rigidbody.velocity.y;
+			this.velocityY.text = "Velocity " + this.rigidbody.velocity.magnitude;
 			if (!this.checkVelocityY ()) {
 					this.velocityY.color = Color.red;
 			} else {
@@ -147,7 +155,7 @@ public class SpacecraftController : MonoBehaviour {
 
 		switch (this.level) {
 		case 1:
-			this.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
+			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
@@ -176,7 +184,7 @@ public class SpacecraftController : MonoBehaviour {
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 2:
-			this.rigidbody.velocity = new Vector3(0.0f, -1.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, -2.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 3:
@@ -318,9 +326,25 @@ public class SpacecraftController : MonoBehaviour {
 		return true;
 	}
 
+	private bool checkPositionZ()
+	{
+		if (rigidbody.position.z > this.dockingPositionThreshold) {
+			return false;
+		}
+		return true;
+	}
+
 	private bool checkVelocityY()
 	{
-		if (Mathf.Abs(rigidbody.velocity.y) > this.dockingVelocityThreshold) {
+		if (Mathf.Abs(rigidbody.velocity.magnitude) > this.dockingVelocityThreshold) {
+			return false;
+		}
+		return true;
+	}
+
+	private bool checkVelocityZ()
+	{
+		if (Mathf.Abs(rigidbody.velocity.z) > this.dockingVelocityThreshold) {
 			return false;
 		}
 		return true;
@@ -334,6 +358,10 @@ public class SpacecraftController : MonoBehaviour {
 		}
 
 		if (!this.checkPositionY ()) {
+			return false;
+		}
+
+		if (!this.checkPositionZ ()) {
 			return false;
 		}
 //
