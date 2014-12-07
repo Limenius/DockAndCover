@@ -11,6 +11,7 @@ ModelImporter:
     100010: Torus.000
     100012: Torus.001
     100014: Torus.006
+    100016: Cylinder.001
     400000: Cube
     400002: Cube.001
     400004: Cube.002
@@ -19,6 +20,7 @@ ModelImporter:
     400010: Torus.000
     400012: Torus.001
     400014: Torus.006
+    400016: Cylinder.001
     2300000: Cube
     2300002: Cube.001
     2300004: Cube.002
@@ -26,6 +28,8 @@ ModelImporter:
     2300008: Torus.000
     2300010: Torus.001
     2300012: Torus.006
+    2300014: //RootNode
+    2300016: Cylinder.001
     3300000: Cube
     3300002: Cube.001
     3300004: Cube.002
@@ -33,17 +37,21 @@ ModelImporter:
     3300008: Torus.000
     3300010: Torus.001
     3300012: Torus.006
+    3300014: //RootNode
+    3300016: Cylinder.001
     4300000: Cube.002
     4300002: Cube.001
     4300004: Torus.006
     4300006: Torus.000
     4300008: Cylinder
     4300010: Torus.001
+    4300012: Cube
+    4300014: Cylinder.001
     9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
-    materialSearch: 1
+    materialSearch: 2
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
