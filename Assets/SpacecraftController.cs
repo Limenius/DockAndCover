@@ -59,8 +59,9 @@ public class SpacecraftController : MonoBehaviour {
 		this.gameOver = false;
 		this.level = 1;
 		this.playing = false;
-
 	}
+
+
 
 	void OnGUI()
 	{
@@ -101,12 +102,41 @@ public class SpacecraftController : MonoBehaviour {
 	}
 	
 	IEnumerator DisplayLevel() {
+		PreLevel ();
 		centerGUI.text = "Level " + level;	
 		yield return new WaitForSeconds(levelWait);
 		centerGUI.text = "";
 		this.playing = true;
+		StartLevel ();
+
 	}
 
+	private void PreLevel()
+	{
+		switch (this.level) {
+		case 1:
+			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 2:
+			break;
+		}
+	}
+
+	private void StartLevel()
+	{
+		switch (level) {
+		case 1:
+			this.rigidbody.velocity = new Vector3(1.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.1f, 0.0f);
+			break;
+		case 2:
+			break;
+		}
+	}
+	
 	void FixedUpdate()
 	{
 		if (this.playing) {
