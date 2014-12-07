@@ -16,6 +16,10 @@ public class SpacecraftController : MonoBehaviour {
 	public GameObject hook2;
 	public GameObject hook3;
 
+	private Quaternion originalHook1Rot;
+	private Quaternion originalHook2Rot;
+	private Quaternion originalHook3Rot;
+
 	public GameObject station;
 
 	private Vector3 acceleration;
@@ -42,6 +46,7 @@ public class SpacecraftController : MonoBehaviour {
 	private bool gameOver;
 	private int level;
 	private bool playing;
+	private bool paused;
 
 	public float levelWait;
 	public float gameOverWait;
@@ -59,6 +64,11 @@ public class SpacecraftController : MonoBehaviour {
 		this.gameOver = false;
 		this.level = 1;
 		this.playing = false;
+		this.paused = true;
+
+		this.originalHook1Rot = this.hook1.transform.rotation;
+		this.originalHook2Rot = this.hook2.transform.rotation;
+		this.originalHook3Rot = this.hook3.transform.rotation;
 	}
 
 
@@ -133,6 +143,7 @@ public class SpacecraftController : MonoBehaviour {
 	{
 		setStationRendererStatus (true);
         isDocked = false;
+		ResetHooks ();
 
 		switch (this.level) {
 		case 1:
@@ -158,6 +169,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	private void StartLevel()
 	{
+		paused = false;
 		switch (level) {
 		case 1:
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
@@ -176,7 +188,7 @@ public class SpacecraftController : MonoBehaviour {
 	
 	void FixedUpdate()
 	{
-		if (this.playing && !this.isDocked) {
+		if (this.playing && !this.isDocked && !this.paused) {
 			this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 			this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 
@@ -252,6 +264,7 @@ public class SpacecraftController : MonoBehaviour {
 			pipipiObj = (GameObject)Instantiate (pipipi, transform.position, transform.rotation);
 			pipipiObj.transform.parent = transform;
 			isDocked = true;
+			paused = true;
 		}
 		
 
@@ -280,9 +293,13 @@ public class SpacecraftController : MonoBehaviour {
 		GameObject dockingObj = (GameObject)Instantiate (docking, transform.position, transform.rotation);
 		dockingObj.transform.parent = transform;
 
+	}
 
-
-
+	private void ResetHooks() 
+	{
+		hook1.transform.rotation = originalHook1Rot;
+		hook2.transform.rotation = originalHook2Rot;
+		hook3.transform.rotation = originalHook3Rot;
 	}
 
 	private bool checkPositionX()
@@ -366,6 +383,7 @@ public class SpacecraftController : MonoBehaviour {
 			gameOver = true;
 			restart = true;
 			StartCoroutine (GameOver());
+			paused = true;
 
 		}
 	}
