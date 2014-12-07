@@ -1,14 +1,44 @@
 fileFormatVersion: 2
-guid: 2b422f34a8f1c47a18c51a9e18264813
+guid: a4de2303938734e6eb4682241ab1dbf9
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
-    7400000: Default Take
+    100000: Cube
+    100002: Cube.001
+    100004: Cube.002
+    100006: Cylinder
+    100008: //RootNode
+    100010: Torus.000
+    100012: Torus.001
+    100014: Torus.006
+    400000: Cube
+    400002: Cube.001
+    400004: Cube.002
+    400006: Cylinder
+    400008: //RootNode
+    400010: Torus.000
+    400012: Torus.001
+    400014: Torus.006
+    2300000: Cube
+    2300002: Cube.001
+    2300004: Cube.002
+    2300006: Cylinder
+    2300008: Torus.000
+    2300010: Torus.001
+    2300012: Torus.006
+    3300000: Cube
+    3300002: Cube.001
+    3300004: Cube.002
+    3300006: Cylinder
+    3300008: Torus.000
+    3300010: Torus.001
+    3300012: Torus.006
+    4300000: Cube.002
+    4300002: Cube.001
+    4300004: Torus.006
+    4300006: Torus.000
+    4300008: Cylinder
+    4300010: Torus.001
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -29,7 +59,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: .00999999978
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
