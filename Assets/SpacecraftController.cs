@@ -83,6 +83,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	void FixedUpdate()
 	{
+		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 		if (Input.GetKey ("up")) {
 			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient * Time.deltaTime);
 		}
