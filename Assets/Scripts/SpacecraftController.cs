@@ -147,7 +147,7 @@ public class SpacecraftController : MonoBehaviour {
 
 		switch (this.level) {
 		case 1:
-			this.transform.position = new Vector3(0.0f, 2.4f, 0.0f);
+			this.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
