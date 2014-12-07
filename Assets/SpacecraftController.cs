@@ -221,6 +221,14 @@ public class SpacecraftController : MonoBehaviour {
 
 
 		return true;
+
+
+	}
+
+	void OnTriggerEnter(Collider other) {
+
+		Debug.Log ("MUERTE");
+
 	}
 
 }
