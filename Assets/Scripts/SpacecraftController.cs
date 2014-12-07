@@ -33,7 +33,8 @@ public class SpacecraftController : MonoBehaviour {
 	public GUIText distanceY;
 	public GUIText distanceZ;
 	public GUIText accelerationY;
-	public GUIText velocityY;
+	public GUIText velocity;
+	public GUIText rotationY;
 
 	public GameObject explosion;
 	public GameObject docking;
@@ -111,11 +112,18 @@ public class SpacecraftController : MonoBehaviour {
 
 			this.accelerationY.text = "Acceleration Y " + this.acceleration.y.ToString("n3");
 
-			this.velocityY.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
-			if (!this.checkVelocityY ()) {
-					this.velocityY.color = Color.red;
+			this.velocity.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
+			if (!this.checkVelocity ()) {
+					this.velocity.color = Color.red;
 			} else {
-					this.velocityY.color = Color.green;
+					this.velocity.color = Color.green;
+			}
+            
+			this.rotationY.text = "RotationY " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
+			if (!this.checkRotationY ()) {
+					this.rotationY.color = Color.red;
+			} else {
+					this.rotationY.color = Color.green;
 			}
 		} else if (!this.gameOver) {
 			StartCoroutine(DisplayLevel());
@@ -350,7 +358,7 @@ public class SpacecraftController : MonoBehaviour {
 		return true;
 	}
 
-	private bool checkVelocityY()
+	private bool checkVelocity()
 	{
 		if (Mathf.Abs(rigidbody.velocity.magnitude) > this.dockingVelocityThreshold) {
 			return false;
@@ -358,13 +366,16 @@ public class SpacecraftController : MonoBehaviour {
 		return true;
 	}
 
-	private bool checkVelocityZ()
-	{
-		if (Mathf.Abs(rigidbody.velocity.z) > this.dockingVelocityThreshold) {
+    private bool checkRotationY(){
+
+		if (Mathf.Abs(rigidbody.rotation.eulerAngles.y - (this.station.rigidbody.rotation.eulerAngles.y + 30)) % 60 > this.dockingRotationThreshold) {
+            //Debug.Log("Our rotation" + rigidbody.rotation.eulerAngles.y);
+            //Debug.Log("Station rotation" + this.station.rigidbody.rotation.eulerAngles.y + 30);
+            //Debug.Log("Angle difference" + Mathf.Abs(rigidbody.rotation.eulerAngles.y - (this.station.rigidbody.rotation.eulerAngles.y + 30)) % 60);
 			return false;
 		}
-		return true;
-	}
+        return true;
+    }
 
 	private bool checkDocking()
 	{
@@ -385,27 +396,21 @@ public class SpacecraftController : MonoBehaviour {
 //			return false;
 //		}
 //
-//		if (Mathf.Abs(rigidbody.velocity.x) > this.dockingVelocityThreshold) {
-//			return false;
-//		}
 
-		if (!this.checkVelocityY ()) {
+		if (!this.checkVelocity ()) {
 			return false;
 		}
 
-//		if (Mathf.Abs(rigidbody.velocity.z) > this.dockingVelocityThreshold) {
-//			return false;
-//		}
-//
 //		if (Mathf.Abs((rigidbody.rotation.x - 0.7071068f) - this.station.rigidbody.rotation.x) > this.dockingRotationThreshold) {
 //			Debug.Log("camera " + (rigidbody.rotation.x ));
 //			Debug.Log(this.station.rigidbody.rotation.x);
 //			return false;
 //		}
 //
-//		if (Mathf.Abs(rigidbody.rotation.y - this.station.rigidbody.rotation.y) > this.dockingRotationThreshold) {
-//			return false;
-//		}
+		if (!this.checkRotationY ()) {
+			return false;
+		}
+
 //
 //		if (Mathf.Abs(rigidbody.rotation.z - this.station.rigidbody.rotation.z) > this.dockingRotationThreshold) {
 //			return false;
