@@ -55,6 +55,9 @@ public class SpacecraftController : MonoBehaviour {
 
 	public GUIText centerGUI;
 
+
+
+
 	void Start()
 	{
 		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
@@ -70,6 +73,8 @@ public class SpacecraftController : MonoBehaviour {
 		this.originalHook1Rot = this.hook1.transform.rotation;
 		this.originalHook2Rot = this.hook2.transform.rotation;
 		this.originalHook3Rot = this.hook3.transform.rotation;
+
+
 	}
 
 
@@ -84,19 +89,19 @@ public class SpacecraftController : MonoBehaviour {
 	void Update()
 	{
 		if (this.playing) {
-			this.distanceX.text = "Distance X " + rigidbody.position.x ;
+			this.distanceX.text = "Distance X " + rigidbody.position.x.ToString("n3") ;
 			if (!this.checkPositionX ()) {
 					this.distanceX.color = Color.red;
 			} else {
 					this.distanceX.color = Color.green;
 			}
-			this.distanceY.text = "Distance Y " + rigidbody.position.y ;
+			this.distanceY.text = "Distance Y " + rigidbody.position.y.ToString("n3") ;
 			if (!this.checkPositionY ()) {
 					this.distanceY.color = Color.red;
 			} else {
 					this.distanceY.color = Color.green;
 			}
-			this.distanceZ.text = "Distance Z " + rigidbody.position.z ;
+			this.distanceZ.text = "Distance Z " + rigidbody.position.z.ToString("n3") ;
 			if (!this.checkPositionZ ()) {
 					this.distanceY.color = Color.red;
 			} else {
@@ -104,9 +109,9 @@ public class SpacecraftController : MonoBehaviour {
 			}
 
 
-			this.accelerationY.text = "Acceleration Y " + this.acceleration.y;
+			this.accelerationY.text = "Acceleration Y " + this.acceleration.y.ToString("n3");
 
-			this.velocityY.text = "Velocity " + this.rigidbody.velocity.magnitude;
+			this.velocityY.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
 			if (!this.checkVelocityY ()) {
 					this.velocityY.color = Color.red;
 			} else {
@@ -201,6 +206,7 @@ public class SpacecraftController : MonoBehaviour {
 			this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 
 			if (Input.GetKey ("up")) {
+
 					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient);
 			}
 
@@ -224,7 +230,7 @@ public class SpacecraftController : MonoBehaviour {
 					this.acceleration = this.acceleration + new Vector3 (0.0f, + this.positionAcceleratorCoefficient, 0.0f);
 			}
 
-			rigidbody.velocity += this.acceleration * Time.deltaTime;
+			rigidbody.velocity += this.acceleration * (Time.deltaTime * Random.Range (0.9f, 1.1f));
 
 			if (Input.GetKey ("a")) {
 					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, 0.0f, - this.rotationAcceleratorCoefficient);
