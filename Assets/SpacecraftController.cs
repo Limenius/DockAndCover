@@ -84,58 +84,60 @@ public class SpacecraftController : MonoBehaviour {
 	void FixedUpdate()
 	{
 		this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
+		this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
+
 		if (Input.GetKey ("up")) {
-			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient * Time.deltaTime);
+			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient);
 		}
 		
 		if (Input.GetKey ("down")) {
-			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z + this.positionAcceleratorCoefficient * Time.deltaTime);
+			this.acceleration = new Vector3(this.acceleration.x, this.acceleration.y, this.acceleration.z + this.positionAcceleratorCoefficient);
 		}
 
 		if (Input.GetKey ("right")) {
-			this.acceleration = new Vector3(this.acceleration.x - this.positionAcceleratorCoefficient * Time.deltaTime, this.acceleration.y, this.acceleration.z);
+			this.acceleration = new Vector3(this.acceleration.x - this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
 		}
 		
 		if (Input.GetKey ("left")) {
-			this.acceleration = new Vector3(this.acceleration.x + this.positionAcceleratorCoefficient * Time.deltaTime, this.acceleration.y, this.acceleration.z);
+			this.acceleration = new Vector3(this.acceleration.x + this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
 		}
 
 		if (Input.GetKey ("o")) {
-			this.acceleration = this.acceleration + new Vector3(0.0f, - this.positionAcceleratorCoefficient * Time.deltaTime, 0.0f);
+			this.acceleration = this.acceleration + new Vector3(0.0f, - this.positionAcceleratorCoefficient, 0.0f);
 		}
 		
 		if (Input.GetKey ("p")) {
-			this.acceleration = this.acceleration + new Vector3(0.0f, + this.positionAcceleratorCoefficient * Time.deltaTime, 0.0f);
+			this.acceleration = this.acceleration + new Vector3(0.0f, + this.positionAcceleratorCoefficient, 0.0f);
 		}
 
-		rigidbody.velocity += this.acceleration;
+		rigidbody.velocity += this.acceleration  * Time.deltaTime;
 
 		if (Input.GetKey ("a")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, 0.0f, - this.rotationAcceleratorCoefficient * Time.deltaTime);
+			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, 0.0f, - this.rotationAcceleratorCoefficient);
 		}
 		
 		if (Input.GetKey ("s")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, 0.0f, + this.rotationAcceleratorCoefficient * Time.deltaTime);
+			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, 0.0f, + this.rotationAcceleratorCoefficient);
 		}
 
 		if (Input.GetKey ("q")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, - this.rotationAcceleratorCoefficient * Time.deltaTime, 0.0f);
+			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, - this.rotationAcceleratorCoefficient, 0.0f);
 		}
 		
 		if (Input.GetKey ("w")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, + this.rotationAcceleratorCoefficient * Time.deltaTime, 0.0f);
+			this.rotationAcceleration = this.rotationAcceleration + new Vector3(0.0f, + this.rotationAcceleratorCoefficient, 0.0f);
 		}
 
 		if (Input.GetKey ("z")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(- this.rotationAcceleratorCoefficient * Time.deltaTime, 0.0f, 0.0f);
+			this.rotationAcceleration = this.rotationAcceleration + new Vector3(- this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
 		}
 		
 		if (Input.GetKey ("x")) {
-			this.rotationAcceleration = this.rotationAcceleration + new Vector3(+ this.rotationAcceleratorCoefficient * Time.deltaTime, 0.0f, 0.0f);
+			this.rotationAcceleration = this.rotationAcceleration + new Vector3(+ this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
 		}
 
 
-		rigidbody.angularVelocity += this.rotationAcceleration;
+		rigidbody.angularVelocity += this.rotationAcceleration * Time.deltaTime;
 
 
 		if (this.checkDocking ()) {
