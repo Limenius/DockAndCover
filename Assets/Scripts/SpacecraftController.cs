@@ -220,7 +220,7 @@ public class SpacecraftController : MonoBehaviour {
 		switch (this.level) {
 		case 1:
 			this.levelTimed = false;
-			this.additionalCenterGUI.text = "Press O and P to approach and retreat from the station\nWatch out your docking speed";
+			this.additionalCenterGUI.text = "Press O and P to approach\nand retreat from the station\nWatch out your docking speed";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
@@ -470,7 +470,7 @@ public class SpacecraftController : MonoBehaviour {
 	}
 
 	IEnumerator DuringDock() {
-		centerGUI.text = "You did it";
+		centerGUI.text = "You did it!\nYou are the best";
 
 		yield return new WaitForSeconds(dockedWait);
 		ResetHooks ();
