@@ -198,43 +198,13 @@ public class SpacecraftController : MonoBehaviour {
 		}
 	}
 
-	IEnumerator HookAnimation(Transform transform, float targetAngleX, float targetAngleY, float targetAngleZ )
-	{
 
-		float currentAngleX = 0.0f;
-		float currentAngleY = 0.0f;
-		float currentAngleZ = 0.0f;
-
-		float originalAngleDistX = currentAngleX - targetAngleX;
-		float originalAngleDistY = currentAngleY - targetAngleY;
-		float originalAngleDistZ = currentAngleZ - targetAngleZ;
-
-		float angleDistX = originalAngleDistX;
-		float angleDistY = originalAngleDistY;
-		float angleDistZ = originalAngleDistZ;
-
-		float totalTime = 1.0f;
-		float timeElapsed = 0.0f;
-
-		while (timeElapsed < totalTime)
-		{
-			timeElapsed += Time.deltaTime;
-			transform.Rotate(targetAngleX * Time.deltaTime / totalTime, targetAngleY * Time.deltaTime / totalTime, targetAngleZ * Time.deltaTime / totalTime);
-
-			yield return null;
-
-		}
-		Destroy (pipipiObj);
-		GameObject dockingObj = (GameObject)Instantiate (docking, transform.position, transform.rotation);
-		dockingObj.transform.parent = transform;
-		
-	}
 
 	private void PreLevel()
 	{
 		setStationRendererStatus (true);
         isDocked = false;
-		ResetHooks ();
+
 		this.timerGUI.text = "";
 		switch (this.level) {
 		case 1:
@@ -485,16 +455,40 @@ public class SpacecraftController : MonoBehaviour {
 
 		yield return new WaitForSeconds(dockedWait);
 		this.level ++;
+		ResetHooks ();
 		StartCoroutine(DisplayLevel());
 	}
 
+	IEnumerator HookAnimation(Transform transform, float targetAngleX, float targetAngleY, float targetAngleZ )
+	{
+		
+		float totalTime = 1.0f;
+		float timeElapsed = 0.0f;
+		
+		while (timeElapsed < totalTime)
+		{
+			timeElapsed += Time.deltaTime;
+			transform.Rotate(targetAngleX * Time.deltaTime / totalTime, targetAngleY * Time.deltaTime / totalTime, targetAngleZ * Time.deltaTime / totalTime);
+			
+			yield return null;
+			
+		}
+		Destroy (pipipiObj);
+		GameObject dockingObj = (GameObject)Instantiate (docking, transform.position, transform.rotation);
+		dockingObj.transform.parent = transform;
+
+		
+	}
 
 
 	private void ResetHooks() 
 	{
-		hook1.transform.rotation = originalHook1Rot;
-		hook2.transform.rotation = originalHook2Rot;
-		hook3.transform.rotation = originalHook3Rot;
+		hook1.transform.Rotate(-90.0f, 0.0f, 0.0f);
+		hook2.transform.Rotate(-90.0f, 0.0f, 0.0f);
+
+		hook3.transform.Rotate(-90.0f, 0.0f, 0.0f);
+
+
 	}
 
 	private bool checkPositionX()
