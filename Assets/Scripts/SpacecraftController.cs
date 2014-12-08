@@ -71,7 +71,7 @@ public class SpacecraftController : MonoBehaviour {
 
 		this.restart = false;
 		this.gameOver = false;
-		this.level = 1;
+		this.level = 5;
 		this.playing = false;
 		this.paused = true;
 
@@ -184,6 +184,7 @@ public class SpacecraftController : MonoBehaviour {
 			this.levelTime = 10.0f;
 			break;
 		case 2:
+			this.levelTimed = false;
 			this.additionalCenterGUI.text = "Watch out your docking speed";
 
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
@@ -195,6 +196,7 @@ public class SpacecraftController : MonoBehaviour {
 			this.levelTime = 100.0f;
 			break;
 		case 3:
+			this.levelTimed = false;
 			this.additionalCenterGUI.text = "Use arrows to move";
 			
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
@@ -206,9 +208,19 @@ public class SpacecraftController : MonoBehaviour {
 			this.levelTime = 100.0f;
 			break;
 		case 4:
+			this.levelTimed = false;
+			this.additionalCenterGUI.text = "Press Z and X to rotate";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 5:
+			this.levelTimed = false;
+			this.additionalCenterGUI.text = "You know you can rotate in two more directions, right? A/D/W/S for those";
+			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (70.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		}
@@ -238,6 +250,10 @@ public class SpacecraftController : MonoBehaviour {
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.3f, 0.0f);
 			break;
+		case 5:
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
 		}
 		this.startLevelTime = Time.time;
 	}
@@ -261,11 +277,11 @@ public class SpacecraftController : MonoBehaviour {
 
 			if (Input.GetKey ("up")) {
 
-					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient);
+					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z + this.positionAcceleratorCoefficient);
 			}
 
 			if (Input.GetKey ("down")) {
-					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z + this.positionAcceleratorCoefficient);
+					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient);
 			}
 
 			if (Input.GetKey ("right")) {
@@ -286,27 +302,27 @@ public class SpacecraftController : MonoBehaviour {
 
 			rigidbody.velocity += this.acceleration * (Time.deltaTime * Random.Range (0.9f, 1.1f));
 
+			if (Input.GetKey ("z")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, - this.rotationAcceleratorCoefficient, 0.0f);
+			}
+
+			if (Input.GetKey ("x")) {
+					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, + this.rotationAcceleratorCoefficient, 0.0f);
+			}
+
 			if (Input.GetKey ("a")) {
 					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, 0.0f, - this.rotationAcceleratorCoefficient);
 			}
 
-			if (Input.GetKey ("s")) {
+			if (Input.GetKey ("d")) {
 					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, 0.0f, + this.rotationAcceleratorCoefficient);
 			}
 
-			if (Input.GetKey ("q")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, - this.rotationAcceleratorCoefficient, 0.0f);
-			}
-
 			if (Input.GetKey ("w")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, + this.rotationAcceleratorCoefficient, 0.0f);
-			}
-
-			if (Input.GetKey ("z")) {
 					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (- this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
 			}
 
-			if (Input.GetKey ("x")) {
+			if (Input.GetKey ("s")) {
 					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (+ this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
 			}
 
@@ -404,13 +420,15 @@ public class SpacecraftController : MonoBehaviour {
 
     private bool checkRotationY(){
 
-		if (Mathf.Abs(rigidbody.rotation.eulerAngles.y - (this.station.rigidbody.rotation.eulerAngles.y + 30)) % 60 > this.dockingRotationThreshold) {
+        float angleDifference = Mathf.Abs(rigidbody.rotation.eulerAngles.y - (this.station.rigidbody.rotation.eulerAngles.y + 30)) % 60;
+
+		if ( (angleDifference < this.dockingRotationThreshold) || ((60 - angleDifference) < this.dockingRotationThreshold) ) {
             //Debug.Log("Our rotation" + rigidbody.rotation.eulerAngles.y);
-            //Debug.Log("Station rotation" + this.station.rigidbody.rotation.eulerAngles.y + 30);
+            //Debug.Log("Station rotation" + (this.station.rigidbody.rotation.eulerAngles.y + 30));
             //Debug.Log("Angle difference" + Mathf.Abs(rigidbody.rotation.eulerAngles.y - (this.station.rigidbody.rotation.eulerAngles.y + 30)) % 60);
-			return false;
+			return true;
 		}
-        return true;
+        return false;
     }
 
 	private bool checkDocking()
