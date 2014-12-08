@@ -124,7 +124,7 @@ public class SpacecraftController : MonoBehaviour {
 					this.velocity.color = Color.green;
 			}
             
-			this.rotationY.text = "RotationY " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
+			this.rotationY.text = "Rotation " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
 			if (!this.checkRotationY ()) {
 					this.rotationY.color = Color.red;
 			} else {
