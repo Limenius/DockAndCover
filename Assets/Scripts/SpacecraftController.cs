@@ -220,7 +220,7 @@ public class SpacecraftController : MonoBehaviour {
 		switch (this.level) {
 		case 1:
 			this.levelTimed = false;
-			this.additionalCenterGUI.text = "Press O and P to approach\nand retreat from the station";
+			this.additionalCenterGUI.text = "Press O and P to approach and retreat from the station\nWatch out your docking speed";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
@@ -228,7 +228,7 @@ public class SpacecraftController : MonoBehaviour {
 			break;
 		case 2:
 			this.levelTimed = false;
-			this.additionalCenterGUI.text = "Watch out your docking speed";
+			this.additionalCenterGUI.text = "Let's try a bit further... and faster";
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
