@@ -73,7 +73,7 @@ public class SpacecraftController : MonoBehaviour {
 
 		this.restart = false;
 		this.gameOver = false;
-		this.level = 5;
+		this.level = 1;
 		this.playing = false;
 		this.paused = true;
 
@@ -119,12 +119,12 @@ public class SpacecraftController : MonoBehaviour {
 
 			//this.accelerationY.text = "Acceleration Y " + this.acceleration.y.ToString("n3");
 
-			//this.velocity.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
-			//if (!this.checkVelocity ()) {
-			//		this.velocity.color = Color.red;
-			//} else {
-			//		this.velocity.color = Color.green;
-			//}
+			this.velocity.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
+			if (!this.checkVelocity ()) {
+					this.velocity.color = Color.red;
+			} else {
+					this.velocity.color = Color.green;
+			}
             
 			this.rotationY.text = "Rotation Y " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
 			if (!this.checkRotationY ()) {
@@ -358,9 +358,9 @@ public class SpacecraftController : MonoBehaviour {
 			this.acceleration = new Vector3(0.0f, 0.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
-			StartCoroutine (HookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f, 0.0f), this.hookSpeed, 0.1f));
-			StartCoroutine (HookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f, 120.0f), this.hookSpeed, 0.1f));
-			StartCoroutine (HookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f, 240.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (HookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f + this.rigidbody.rotation.y, 0.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (HookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f + this.rigidbody.rotation.y, 120.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (HookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f + this.rigidbody.rotation.y, 240.0f), this.hookSpeed, 0.1f));
 			StartCoroutine (DuringDock());
 			pipipiObj = (GameObject)Instantiate (pipipi, transform.position, transform.rotation);
 			pipipiObj.transform.parent = transform;
