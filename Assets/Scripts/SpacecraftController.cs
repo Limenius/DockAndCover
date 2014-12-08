@@ -198,31 +198,24 @@ public class SpacecraftController : MonoBehaviour {
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-			this.levelTime = 10.0f;
 			break;
 		case 2:
 			this.levelTimed = false;
 			this.additionalCenterGUI.text = "Watch out your docking speed";
-
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.levelTimed = false;
-
-			this.levelTime = 100.0f;
 			break;
 		case 3:
 			this.levelTimed = false;
-			this.additionalCenterGUI.text = "Use arrows to move";
-			
+			this.additionalCenterGUI.text = "Use arrows to move";			
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-			this.levelTimed = false;
-			
-			this.levelTime = 100.0f;
+			this.levelTimed = false;			
 			break;
 		case 4:
 			this.levelTimed = false;
@@ -234,11 +227,56 @@ public class SpacecraftController : MonoBehaviour {
 			break;
 		case 5:
 			this.levelTimed = false;
-			this.additionalCenterGUI.text = "You know you can rotate in two more directions, right? A/D/W/S for that";
+			this.additionalCenterGUI.text = "You can rotate in two more directions, right?\nUse A/D/W/S for that";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (70.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 6:
+			this.levelTimed = true;
+			this.additionalCenterGUI.text = "Ok... that was just a simulation\nLet's go for some real stuff!";
+			this.transform.position = new Vector3(0.0f, 4.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTime = 10.0f;
+			break;
+		case 7:
+			this.levelTimed = true;
+			this.additionalCenterGUI.text = "Nice one...\nTry to control your spin quick now";
+			this.transform.position = new Vector3(0.0f, 12.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTime = 15.0f;
+			break;
+		case 8:
+			this.levelTimed = true;
+			this.additionalCenterGUI.text = "You are good!\nLet's see how you deal with a crisis";
+			this.transform.position = new Vector3(0.0f, 4.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTime = 25.0f;
+			break;
+		case 9:
+			this.levelTimed = true;
+			this.additionalCenterGUI.text = "Ok... What about a REAL crisis?";
+			this.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTime = 50.0f;
+			break;
+		case 10:
+			this.levelTimed = true;
+			this.additionalCenterGUI.text = "That was great, but you had a lot of time\nProve now that you are THE BEST\nand go happily to home";
+			this.transform.position = new Vector3(-1.0f, 2.0f, -1.0f);
+			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler (90.0f, -45.0f, -30.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			this.levelTime = 30.0f;
 			break;
 		}
 		if (this.levelTimed) {
@@ -270,6 +308,26 @@ public class SpacecraftController : MonoBehaviour {
 		case 5:
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 6:
+			this.rigidbody.velocity = new Vector3(0.0f, 2.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			break;
+		case 7:
+			this.rigidbody.velocity = new Vector3(0.0f, -3.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.6f, 0.0f);
+			break;
+		case 8:
+			this.rigidbody.velocity = new Vector3(0.0f, 2.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(-2.0f, 0.0f, 0.0f);
+			break;
+		case 9:
+			this.rigidbody.velocity = new Vector3(0.0f, 2.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(4.0f, 0.0f, 3.0f);
+			break;
+		case 10:
+			this.rigidbody.velocity = new Vector3(0.0f, 2.0f, 0.0f);
+			this.rigidbody.angularVelocity = new Vector3(4.0f, 0.0f, 3.0f);
 			break;
 		}
 		this.startLevelTime = Time.time;
