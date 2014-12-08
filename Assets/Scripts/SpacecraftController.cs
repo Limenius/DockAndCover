@@ -32,9 +32,11 @@ public class SpacecraftController : MonoBehaviour {
 	public GUIText distanceX;
 	public GUIText distanceY;
 	public GUIText distanceZ;
-	public GUIText accelerationY;
+	//public GUIText accelerationY;
 	public GUIText velocity;
 	public GUIText rotationY;
+	public GUIText rotationX;
+	public GUIText rotationZ;
 
 	public GameObject explosion;
 	public GameObject docking;
@@ -115,21 +117,36 @@ public class SpacecraftController : MonoBehaviour {
 			}
 
 
-			this.accelerationY.text = "Acceleration Y " + this.acceleration.y.ToString("n3");
+			//this.accelerationY.text = "Acceleration Y " + this.acceleration.y.ToString("n3");
 
-			this.velocity.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
-			if (!this.checkVelocity ()) {
-					this.velocity.color = Color.red;
-			} else {
-					this.velocity.color = Color.green;
-			}
+			//this.velocity.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
+			//if (!this.checkVelocity ()) {
+			//		this.velocity.color = Color.red;
+			//} else {
+			//		this.velocity.color = Color.green;
+			//}
             
-			this.rotationY.text = "Rotation " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
+			this.rotationY.text = "Rotation Y " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
 			if (!this.checkRotationY ()) {
 					this.rotationY.color = Color.red;
 			} else {
 					this.rotationY.color = Color.green;
 			}
+
+			this.rotationX.text = "Rotation X " + (this.rigidbody.rotation.eulerAngles.x - 90).ToString("n3");
+			if (!this.checkRotationX ()) {
+					this.rotationX.color = Color.red;
+			} else {
+					this.rotationX.color = Color.green;
+			}
+
+			this.rotationZ.text = "Rotation Z " + this.rigidbody.rotation.eulerAngles.z.ToString("n3");
+			if (!this.checkRotationZ ()) {
+					this.rotationZ.color = Color.red;
+			} else {
+					this.rotationZ.color = Color.green;
+			}
+
 		} else if (!this.gameOver) {
 			StartCoroutine(DisplayLevel());
 		} else if (this.restart) {
@@ -217,7 +234,7 @@ public class SpacecraftController : MonoBehaviour {
 			break;
 		case 5:
 			this.levelTimed = false;
-			this.additionalCenterGUI.text = "You know you can rotate in two more directions, right? A/D/W/S for those";
+			this.additionalCenterGUI.text = "You know you can rotate in two more directions, right? A/D/W/S for that";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (70.0f, 0.0f, 0.0f);
@@ -429,6 +446,22 @@ public class SpacecraftController : MonoBehaviour {
 			return true;
 		}
         return false;
+    }
+
+    private bool checkRotationX(){
+
+		if (Mathf.Abs((rigidbody.rotation.eulerAngles.x - 90) - this.station.rigidbody.rotation.eulerAngles.x) > 5) {
+			return false;
+		}
+        return true;
+    }
+
+    private bool checkRotationZ(){
+
+		if (Mathf.Abs(rigidbody.rotation.eulerAngles.z - (this.station.rigidbody.rotation.eulerAngles.z)) > 5) {
+			return false;
+		}
+        return true;
     }
 
 	private bool checkDocking()
