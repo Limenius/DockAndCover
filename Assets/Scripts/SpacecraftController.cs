@@ -382,53 +382,62 @@ public class SpacecraftController : MonoBehaviour {
 
 			if (Input.GetKey ("up")) {
 
-					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z + this.positionAcceleratorCoefficient);
+				this.acceleration = this.acceleration + transform.TransformDirection(new Vector3 (0.0f, + this.positionAcceleratorCoefficient, 0.0f));
+
 			}
 
 			if (Input.GetKey ("down")) {
-					this.acceleration = new Vector3 (this.acceleration.x, this.acceleration.y, this.acceleration.z - this.positionAcceleratorCoefficient);
+				this.acceleration = this.acceleration + transform.TransformDirection(new Vector3 (0.0f, - this.positionAcceleratorCoefficient, 0.0f));
+
 			}
 
 			if (Input.GetKey ("right")) {
-					this.acceleration = new Vector3 (this.acceleration.x + this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
+				this.acceleration = this.acceleration + transform.TransformDirection(new Vector3 (+ this.positionAcceleratorCoefficient, 0.0f, 0.0f));
 			}
 
 			if (Input.GetKey ("left")) {
-					this.acceleration = new Vector3 (this.acceleration.x - this.positionAcceleratorCoefficient, this.acceleration.y, this.acceleration.z);
+				this.acceleration = this.acceleration + transform.TransformDirection(new Vector3 (- this.positionAcceleratorCoefficient, 0.0f, 0.0f));
 			}
 
 			if (Input.GetKey ("o")) {
-					this.acceleration = this.acceleration + new Vector3 (0.0f, - this.positionAcceleratorCoefficient, 0.0f);
+				this.acceleration = this.acceleration + transform.TransformDirection(new Vector3 (0.0f, 0.0f, + this.positionAcceleratorCoefficient));
+
 			}
 
 			if (Input.GetKey ("p")) {
-					this.acceleration = this.acceleration + new Vector3 (0.0f, + this.positionAcceleratorCoefficient, 0.0f);
+				this.acceleration = this.acceleration + transform.TransformDirection(new Vector3 (0.0f, 0.0f, - this.positionAcceleratorCoefficient));
+
+
+		
 			}
 
 			rigidbody.velocity += this.acceleration * (Time.deltaTime * Random.Range (0.9f, 1.1f));
 
 			if (Input.GetKey ("z")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, - this.rotationAcceleratorCoefficient, 0.0f);
+				this.rotationAcceleration = this.rotationAcceleration + transform.TransformDirection(new Vector3 (0.0f, 0.0f, + this.rotationAcceleratorCoefficient));
 			}
 
 			if (Input.GetKey ("x")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, + this.rotationAcceleratorCoefficient, 0.0f);
+				this.rotationAcceleration = this.rotationAcceleration + transform.TransformDirection(new Vector3 (0.0f, 0.0f, - this.rotationAcceleratorCoefficient));
 			}
 
 			if (Input.GetKey ("a")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, 0.0f, - this.rotationAcceleratorCoefficient);
+				this.rotationAcceleration = this.rotationAcceleration + transform.TransformDirection(new Vector3 (0.0f, - this.rotationAcceleratorCoefficient, 0.0f ));
+
+
 			}
 
 			if (Input.GetKey ("d")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (0.0f, 0.0f, + this.rotationAcceleratorCoefficient);
+				this.rotationAcceleration = this.rotationAcceleration + transform.TransformDirection(new Vector3 (0.0f, + this.rotationAcceleratorCoefficient, 0.0f ));
 			}
 
 			if (Input.GetKey ("w")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (- this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
+				this.rotationAcceleration = this.rotationAcceleration + transform.TransformDirection(new Vector3 (- this.rotationAcceleratorCoefficient, 0.0f, 0.0f ));
+
 			}
 
 			if (Input.GetKey ("s")) {
-					this.rotationAcceleration = this.rotationAcceleration + new Vector3 (+ this.rotationAcceleratorCoefficient, 0.0f, 0.0f);
+				this.rotationAcceleration = this.rotationAcceleration + transform.TransformDirection(new Vector3 (+ this.rotationAcceleratorCoefficient, 0.0f, 0.0f ));
 			}
 
 
