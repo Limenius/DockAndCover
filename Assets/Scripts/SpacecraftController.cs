@@ -184,6 +184,38 @@ public class SpacecraftController : MonoBehaviour {
 		}
 	}
 
+	IEnumerator HookAnimation(Transform transform, float targetAngleX, float targetAngleY, float targetAngleZ )
+	{
+
+		float currentAngleX = 0.0f;
+		float currentAngleY = 0.0f;
+		float currentAngleZ = 0.0f;
+
+		float originalAngleDistX = currentAngleX - targetAngleX;
+		float originalAngleDistY = currentAngleY - targetAngleY;
+		float originalAngleDistZ = currentAngleZ - targetAngleZ;
+
+		float angleDistX = originalAngleDistX;
+		float angleDistY = originalAngleDistY;
+		float angleDistZ = originalAngleDistZ;
+
+		float totalTime = 1.0f;
+		float timeElapsed = 0.0f;
+
+		while (timeElapsed < totalTime)
+		{
+			timeElapsed += Time.deltaTime;
+			transform.Rotate(targetAngleX * Time.deltaTime / totalTime, targetAngleY * Time.deltaTime / totalTime, targetAngleZ * Time.deltaTime / totalTime);
+
+			yield return null;
+
+		}
+		Destroy (pipipiObj);
+		GameObject dockingObj = (GameObject)Instantiate (docking, transform.position, transform.rotation);
+		dockingObj.transform.parent = transform;
+		
+	}
+
 	private void PreLevel()
 	{
 		setStationRendererStatus (true);
@@ -192,11 +224,15 @@ public class SpacecraftController : MonoBehaviour {
 		this.timerGUI.text = "";
 		switch (this.level) {
 		case 1:
+
+
 			this.levelTimed = false;
 			this.additionalCenterGUI.text = "Press O and P to approach\nand retreat from the station";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
+
+
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 2:
@@ -416,9 +452,10 @@ public class SpacecraftController : MonoBehaviour {
 			this.acceleration = new Vector3(0.0f, 0.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3 (0.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
-			StartCoroutine (HookAnimation (hook1.transform, Quaternion.Euler (90.0f, 0.0f + this.rigidbody.rotation.y, 0.0f), this.hookSpeed, 0.1f));
-			StartCoroutine (HookAnimation (hook2.transform, Quaternion.Euler (90.0f, 0.0f + this.rigidbody.rotation.y, 120.0f), this.hookSpeed, 0.1f));
-			StartCoroutine (HookAnimation (hook3.transform, Quaternion.Euler (90.0f, 0.0f + this.rigidbody.rotation.y, 240.0f), this.hookSpeed, 0.1f));
+			StartCoroutine (HookAnimation (hook1.transform, 90.0f, 0.0f, 0.0f));
+			StartCoroutine (HookAnimation (hook2.transform, 90.0f, 0.0f, 0.0f));
+			StartCoroutine (HookAnimation (hook3.transform, 90.0f, 0.0f, 0.0f));
+
 			StartCoroutine (DuringDock());
 			pipipiObj = (GameObject)Instantiate (pipipi, transform.position, transform.rotation);
 			pipipiObj.transform.parent = transform;
@@ -437,22 +474,7 @@ public class SpacecraftController : MonoBehaviour {
 		StartCoroutine(DisplayLevel());
 	}
 
-	IEnumerator HookAnimation(Transform trans, Quaternion destRot, float speed, float threshold )
-	{
-		float angleDist = Quaternion.Angle(trans.rotation, destRot);
-		
-		while (angleDist > threshold)
-		{
-			trans.rotation = Quaternion.RotateTowards(trans.rotation, destRot, Time.deltaTime * speed);
-			yield return null;
-			
-			angleDist = Quaternion.Angle(trans.rotation, destRot);
-		}
-		Destroy (pipipiObj);
-		GameObject dockingObj = (GameObject)Instantiate (docking, transform.position, transform.rotation);
-		dockingObj.transform.parent = transform;
 
-	}
 
 	private void ResetHooks() 
 	{
