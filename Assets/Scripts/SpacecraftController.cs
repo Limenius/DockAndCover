@@ -27,7 +27,8 @@ public class SpacecraftController : MonoBehaviour {
 	private Vector3 rotationAcceleration;
 	private Vector3 rotationSpeed;
 
-	public Texture2D crosshairImage;
+
+	public GUITexture crosshair;
 
 	public GUIText distanceX;
 	public GUIText distanceY;
@@ -89,6 +90,7 @@ public class SpacecraftController : MonoBehaviour {
 
 	void OnGUI()
 	{
+
 		//float xMin = (Screen.width / 2) - (crosshairImage.width / 2);
 		//float yMin = (Screen.height / 2) - (crosshairImage.height / 2);
 		//GUI.DrawTexture(new Rect(xMin, yMin, crosshairImage.width, crosshairImage.height), crosshairImage);
@@ -97,54 +99,66 @@ public class SpacecraftController : MonoBehaviour {
 	void Update()
 	{
 		if (this.playing) {
-			this.distanceX.text = "Distance X " + rigidbody.position.x.ToString("n3") ;
-			if (!this.checkPositionX ()) {
-					this.distanceX.color = Color.red;
-			} else {
-					this.distanceX.color = Color.green;
-			}
-			this.distanceY.text = "Distance Y " + rigidbody.position.y.ToString("n3") ;
-			if (!this.checkPositionY ()) {
-					this.distanceY.color = Color.red;
-			} else {
-					this.distanceY.color = Color.green;
-			}
-			this.distanceZ.text = "Distance Z " + rigidbody.position.z.ToString("n3") ;
-			if (!this.checkPositionZ ()) {
-					this.distanceZ.color = Color.red;
-			} else {
-					this.distanceZ.color = Color.green;
-			}
+			if (!this.paused) {
+				this.distanceX.text = "Distance X " + rigidbody.position.x.ToString("n3") ;
+				if (!this.checkPositionX ()) {
+						this.distanceX.color = Color.red;
+				} else {
+						this.distanceX.color = Color.green;
+				}
+				this.distanceY.text = "Distance Y " + rigidbody.position.y.ToString("n3") ;
+				if (!this.checkPositionY ()) {
+						this.distanceY.color = Color.red;
+				} else {
+						this.distanceY.color = Color.green;
+				}
+				this.distanceZ.text = "Distance Z " + rigidbody.position.z.ToString("n3") ;
+				if (!this.checkPositionZ ()) {
+						this.distanceZ.color = Color.red;
+				} else {
+						this.distanceZ.color = Color.green;
+				}
 
 
-			//this.accelerationY.text = "Acceleration Y " + this.acceleration.y.ToString("n3");
+				//this.accelerationY.text = "Acceleration Y " + this.acceleration.y.ToString("n3");
 
-			this.velocity.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
-			if (!this.checkVelocity ()) {
-					this.velocity.color = Color.red;
-			} else {
-					this.velocity.color = Color.green;
-			}
-            
-			this.rotationY.text = "Rotation Y " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
-			if (!this.checkRotationY ()) {
-					this.rotationY.color = Color.red;
-			} else {
-					this.rotationY.color = Color.green;
-			}
+				this.velocity.text = "Velocity " + this.rigidbody.velocity.magnitude.ToString("n3");
+				if (!this.checkVelocity ()) {
+						this.velocity.color = Color.red;
+				} else {
+						this.velocity.color = Color.green;
+				}
+	            
+				this.rotationY.text = "Rotation Y " + this.rigidbody.rotation.eulerAngles.y.ToString("n3");
+				if (!this.checkRotationY ()) {
+						this.rotationY.color = Color.red;
+				} else {
+						this.rotationY.color = Color.green;
+				}
 
-			this.rotationX.text = "Rotation X " + (this.rigidbody.rotation.eulerAngles.x - 90).ToString("n3");
-			if (!this.checkRotationX ()) {
-					this.rotationX.color = Color.red;
-			} else {
-					this.rotationX.color = Color.green;
-			}
+				this.rotationX.text = "Rotation X " + (this.rigidbody.rotation.eulerAngles.x - 90).ToString("n3");
+				if (!this.checkRotationX ()) {
+						this.rotationX.color = Color.red;
+				} else {
+						this.rotationX.color = Color.green;
+				}
 
-			this.rotationZ.text = "Rotation Z " + this.rigidbody.rotation.eulerAngles.z.ToString("n3");
-			if (!this.checkRotationZ ()) {
-					this.rotationZ.color = Color.red;
+				this.rotationZ.text = "Rotation Z " + this.rigidbody.rotation.eulerAngles.z.ToString("n3");
+				if (!this.checkRotationZ ()) {
+						this.rotationZ.color = Color.red;
+				} else {
+						this.rotationZ.color = Color.green;
+				}
+				this.crosshair.enabled = true;
 			} else {
-					this.rotationZ.color = Color.green;
+				this.distanceX.text = "";
+				this.distanceY.text = "";
+				this.distanceZ.text = "";
+				this.rotationX.text = "";
+				this.rotationY.text = "";
+				this.rotationZ.text = "";
+				this.velocity.text = "";
+				this.crosshair.enabled = false;
 			}
 
 		} else if (!this.gameOver) {
