@@ -16,9 +16,7 @@ public class SpacecraftController : MonoBehaviour {
 	public GameObject hook2;
 	public GameObject hook3;
 
-	private Quaternion originalHook1Rot;
-	private Quaternion originalHook2Rot;
-	private Quaternion originalHook3Rot;
+
 
 	public GameObject station;
 
@@ -61,6 +59,8 @@ public class SpacecraftController : MonoBehaviour {
 	public GUIText additionalCenterGUI;
 	public GUIText timerGUI;
 
+	public int lastLevel;
+
 	private bool levelTimed;
 	private float levelTime;
 	private float startLevelTime;
@@ -74,32 +74,38 @@ public class SpacecraftController : MonoBehaviour {
 
 		this.restart = false;
 		this.gameOver = false;
-		this.level = 1;
+		this.lastLevel = 11;
 		this.playing = false;
 		this.paused = true;
-
-		this.originalHook1Rot = this.hook1.transform.rotation;
-		this.originalHook2Rot = this.hook2.transform.rotation;
-		this.originalHook3Rot = this.hook3.transform.rotation;
-
 		this.timerGUI.text = "";
 
 	}
 
+	public void Initial() {
+		centerGUI.text = "DOCK AND COVER\nby Limenius";
+		additionalCenterGUI.text = "Press space to begin";
 
+		this.level = 1;
+		setStationRendererStatus (false);
+		ClearSecondaryGUI ();
 
-	void OnGUI()
-	{
-
-		//float xMin = (Screen.width / 2) - (crosshairImage.width / 2);
-		//float yMin = (Screen.height / 2) - (crosshairImage.height / 2);
-		//GUI.DrawTexture(new Rect(xMin, yMin, crosshairImage.width, crosshairImage.height), crosshairImage);
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			StartCoroutine(DisplayLevel());
+		}
 	}
+	
+
 
 	void Update()
 	{
 		if (this.playing) {
 			if (!this.paused) {
+				if (Input.GetKeyDown (KeyCode.R)) 
+				{
+					
+					StartCoroutine(DisplayLevel());
+					
+				}
 				this.distanceX.text = "Distance X " + rigidbody.position.x.ToString("n3") ;
 				if (!this.checkPositionX ()) {
 						this.distanceX.color = Color.red;
@@ -151,18 +157,12 @@ public class SpacecraftController : MonoBehaviour {
 				}
 				this.crosshair.enabled = true;
 			} else {
-				this.distanceX.text = "";
-				this.distanceY.text = "";
-				this.distanceZ.text = "";
-				this.rotationX.text = "";
-				this.rotationY.text = "";
-				this.rotationZ.text = "";
-				this.velocity.text = "";
-				this.crosshair.enabled = false;
+				ClearSecondaryGUI();
+
 			}
 
 		} else if (!this.gameOver) {
-			StartCoroutine(DisplayLevel());
+			Initial ();
 		} else if (this.restart) {
 
 			if (Input.GetKeyDown (KeyCode.R)) 
@@ -175,6 +175,17 @@ public class SpacecraftController : MonoBehaviour {
 		}
 
 	
+	}
+
+	public void ClearSecondaryGUI() {
+		this.distanceX.text = "";
+		this.distanceY.text = "";
+		this.distanceZ.text = "";
+		this.rotationX.text = "";
+		this.rotationY.text = "";
+		this.rotationZ.text = "";
+		this.velocity.text = "";
+		this.crosshair.enabled = false;
 	}
 	
 	IEnumerator DisplayLevel() {
@@ -208,15 +219,11 @@ public class SpacecraftController : MonoBehaviour {
 		this.timerGUI.text = "";
 		switch (this.level) {
 		case 1:
-
-
 			this.levelTimed = false;
 			this.additionalCenterGUI.text = "Press O and P to approach\nand retreat from the station";
 			this.transform.position = new Vector3(0.0f, 3.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
-
-
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 			break;
 		case 2:
@@ -230,7 +237,7 @@ public class SpacecraftController : MonoBehaviour {
 			break;
 		case 3:
 			this.levelTimed = false;
-			this.additionalCenterGUI.text = "Use arrows to move";			
+			this.additionalCenterGUI.text = "Use arrows to move\nIf you feel lost, press R to restart";			
 			this.transform.position = new Vector3(0.0f, 6.0f, 0.0f);
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 			this.transform.rotation = Quaternion.Euler (90.0f, 0.0f, 0.0f);
@@ -304,6 +311,8 @@ public class SpacecraftController : MonoBehaviour {
 		}
 	}
 
+
+
 	private void StartLevel()
 	{
 		paused = false;
@@ -320,6 +329,7 @@ public class SpacecraftController : MonoBehaviour {
 		case 3:
 			this.rigidbody.velocity = new Vector3(1.0f, 0.0f, 0.0f);
 			this.rigidbody.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+
 			break;
 		case 4:
 			this.rigidbody.velocity = new Vector3(0.0f, 0.0f, 0.0f);
@@ -355,6 +365,7 @@ public class SpacecraftController : MonoBehaviour {
 	
 	void FixedUpdate()
 	{
+
 		if (this.playing && !this.isDocked && !this.paused) {
 			if (this.levelTimed) {
 				float remaining = (this.levelTime - (Time.time - this.startLevelTime));
@@ -366,7 +377,6 @@ public class SpacecraftController : MonoBehaviour {
 				}
 				this.timerGUI.text = remaining.ToString("n1");
 			}
-
 			this.acceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 			this.rotationAcceleration = new Vector3 (0.0f, 0.0f, 0.0f);
 
@@ -454,9 +464,25 @@ public class SpacecraftController : MonoBehaviour {
 		centerGUI.text = "You did it";
 
 		yield return new WaitForSeconds(dockedWait);
-		this.level ++;
 		ResetHooks ();
-		StartCoroutine(DisplayLevel());
+		this.level ++;
+		if (this.level == this.lastLevel) {
+			YouWon();
+		} else {
+		
+			StartCoroutine(DisplayLevel());
+		}
+	}
+
+	public void YouWon() {
+		centerGUI.text = "Congratulations! You won";
+		additionalCenterGUI.text = "You have mastered this thing\nPress R to play again";
+		playing = false;
+		gameOver = true;
+		restart = true;
+		paused = true;
+		this.level = 1;
+		setStationRendererStatus (false);
 	}
 
 	IEnumerator HookAnimation(Transform transform, float targetAngleX, float targetAngleY, float targetAngleZ )
@@ -600,10 +626,6 @@ public class SpacecraftController : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 
 		if (playing) {
-			GameObject explosionObj = (GameObject) Instantiate (explosion, transform.position, transform.rotation);
-			explosionObj.transform.parent = transform;
-
-
 			StartCoroutine (GameOver("Crashed\nThat ship was worth $3bn"));
 
 
@@ -611,6 +633,8 @@ public class SpacecraftController : MonoBehaviour {
 	}
 
 	IEnumerator GameOver(string reason) {
+		GameObject explosionObj = (GameObject) Instantiate (explosion, transform.position, transform.rotation);
+		explosionObj.transform.parent = transform;
 		playing = false;
 		gameOver = true;
 		restart = true;
